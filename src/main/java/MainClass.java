@@ -6,9 +6,31 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.System.getProperty;
+import static java.lang.System.setOut;
+
 public class MainClass {
     public static void main(String[] args) {
-        System.setProperty("webdriver.gecko.driver", "C:\\Users\\Dmitry B\\IdeaProjects\\testselenium\\drivers\\geckodriver.exe");
+        String osName = System.getProperty("os.name");
+
+        System.out.println(osName);
+
+        if (osName.contains("Mac")) {
+            System.setProperty("webdriver.gecko.driver"
+                    ,"/Users/dzb/IdeaProjects/seleniumcourse01/drivers/geckodriver");
+            System.setProperty("selenium.browser", "Firefox");
+
+        } else if (osName.contains("aWin")) {
+            System.setProperty("webdriver.gecko.driver"
+                    , "C:\\Users\\Dmitry B\\IdeaProjects\\testselenium\\drivers\\geckodriver.exe");
+            System.setProperty("selenium.browser", "Firefox");
+
+        } else {
+            System.out.println("Add any drivers for browsers for your OS");;
+        }
+
+        //System.setProperty("webdriver.chrome.driver", "/Users/dzb/Downloads/chromedriver");
+        //System.setProperty("selenide.browser", "Chrome");
 
         WebDriver driver = new FirefoxDriver();
 
@@ -47,9 +69,14 @@ public class MainClass {
         System.out.println("Button text is: " + buttonSignUp.getText());
 
         //driver.findElement(By.xpath("//a[text()='Sign in']")).click();
-        //driver.quit();
 
-        driver.get("facebook.com");
+
+        driver.get("http://facebook.com");
         driver.findElement(By.xpath("//label[@id='loginbutton']/input")).submit();
+
+
+        //44 lesson
+
+        driver.quit();
     }
 }
