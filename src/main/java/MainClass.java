@@ -10,6 +10,8 @@ import static java.lang.System.getProperty;
 import static java.lang.System.setOut;
 
 public class MainClass {
+    static WebDriver driver;
+
     public static void main(String[] args) {
         String osName = System.getProperty("os.name");
 
@@ -20,7 +22,7 @@ public class MainClass {
                     ,"/Users/dzb/IdeaProjects/seleniumcourse01/drivers/geckodriver");
             System.setProperty("selenium.browser", "Firefox");
 
-        } else if (osName.contains("aWin")) {
+        } else if (osName.contains("Win")) {
             System.setProperty("webdriver.gecko.driver"
                     , "C:\\Users\\Dmitry B\\IdeaProjects\\testselenium\\drivers\\geckodriver.exe");
             System.setProperty("selenium.browser", "Firefox");
@@ -32,7 +34,7 @@ public class MainClass {
         //System.setProperty("webdriver.chrome.driver", "/Users/dzb/Downloads/chromedriver");
         //System.setProperty("selenide.browser", "Chrome");
 
-        WebDriver driver = new FirefoxDriver();
+        driver = new FirefoxDriver();
 
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
@@ -50,7 +52,7 @@ public class MainClass {
 
         driver.get("http://en.wikipedia.org");
 
-        WebElement link = driver.findElement(By.linkText("Log in"));
+        WebElement linkLogIn = driver.findElement(By.linkText("Log in"));
         WebElement link2 = driver.findElement(By.partialLinkText("Donate"));
         WebElement searchField = driver.findElement(By.name("search"));
         WebElement searchButton = driver.findElement(By.className("searchButton"));
@@ -71,12 +73,88 @@ public class MainClass {
         //driver.findElement(By.xpath("//a[text()='Sign in']")).click();
 
 
-        driver.get("http://facebook.com");
+        driver.get("http://www.facebook.com");
         driver.findElement(By.xpath("//label[@id='loginbutton']/input")).submit();
 
 
         //44 lesson
+        driver.get("http://en.wikipedia.org");
+        driver.findElement(By.xpath("//input[@id='searchInput']")).sendKeys("Selenium WebDriver");
+        driver.findElement(By.xpath("//input[@id='searchButton']")).click();
+        System.out.println(driver.findElement(By.xpath("//div[@id='searchText']/input")).getAttribute("value"));
+        driver.findElement(By.xpath("//div[@id='searchText']/input")).clear();
+
+        driver.get("http://github.com");
+        driver.findElement(By.xpath(".//*[@id='user[login]']")).sendKeys("testusername");
+        driver.findElement(By.xpath(".//*[@id='user[password]']")).sendKeys("testpass");
+        WebElement button = driver.findElement(By.xpath("//form[@class='home-hero-signup js-signup-form']//button"));
+        button.submit();
+//        driver.findElement(By.xpath("//a[text()='Sign in']")).click();
+//
+        driver.get("http://www.facebook.com");
+        driver.findElement(By.xpath(".//*[@id='email']")).sendKeys("testmail");
+        driver.findElement(By.xpath(".//*[@id='pass']")).sendKeys("testpass");
+        driver.findElement(By.xpath("//label[@id='loginbutton']/input")).submit();
+        //driver.findElement(By.name("login")).submit();
+        System.out.println("Mail is: " + driver.findElement(By.xpath(".//*[@id='email']")).getAttribute("value"));
+
+        //45 lesson
+        driver.get("http://en.wikipedia.org");
+
+        WebElement link = driver.findElement(By.xpath("//li[@id='n-aboutsite']/a"));
+        System.out.println(link.getText());
+        link.click();
+//label[@id='loginbutton']/input
+        driver.get("http://github.com");
+        driver.findElement(By.xpath("//li[@class='ml-lg-2']/a")).click();
+
+        driver.get("http://en-gb.facebook.com");
+        driver.findElement(By.xpath("//a[text()='Forgotten account?']")).click();
+
+        //46 lesson - radio buttons ans check boxes
+        driver.get("https://market.yandex.ru");
+
+        driver.findElement(By.xpath("//a[text()='Бытовая техника']")).click();
+        driver.findElement(By.xpath("//a[text()='Холодильники']")).click();
+        System.out.println();
+//        if (!driver.findElement(By.xpath("//span[text()='ATLANT']/../preceding-sibling::input")).isSelected()) {
+//            driver.findElement(By.xpath("//span[text()='ATLANT']/..")).click();
+//        }
+//
+//        System.out.println(driver.findElement(By.xpath("//span[text()='ATLANT']/../preceding-sibling::input")).isSelected());
+        //driver.findElement(By.xpath("//span[text()='Bosch']")).click();
+        //driver.findElement(By.xpath("//span[text()='LG']")).click();
+
+        selectCheckBox("ATLANT");
+        selectCheckBox("Bosch");
+        selectCheckBox("LG");
+        selectCheckBox("BEKO");
+
+        deselectCheckBox("LG");
+
+        System.out.println();
+
+        System.out.println(driver.findElement(By.xpath("//span[text()='Самовывоз']/../preceding-sibling::input")).isSelected());
+        driver.findElement(By.xpath("//span[text()='Самовывоз']")).click();
+        System.out.println(driver.findElement(By.xpath("//span[text()='Самовывоз']/../preceding-sibling::input")).isSelected());
+
 
         driver.quit();
+    }
+
+    public static void selectCheckBox(String name) {
+        String checkBoxXpath = "//span[text()='%s']/..";
+
+        if (!driver.findElement(By.xpath(String.format(checkBoxXpath, name) + "/preceding-sibling::input")).isSelected()) {
+            driver.findElement(By.xpath(String.format(checkBoxXpath, name))).click();
+        }
+    }
+
+    public static void deselectCheckBox(String name) {
+        String checkBoxXpath = "//span[text()='%s']/..";
+
+        if (driver.findElement(By.xpath(String.format(checkBoxXpath, name) + "/preceding-sibling::input")).isSelected()) {
+            driver.findElement(By.xpath(String.format(checkBoxXpath, name))).click();
+        }
     }
 }
