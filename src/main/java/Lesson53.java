@@ -33,7 +33,7 @@ public class Lesson53 {
             System.setProperty("selenium.browser", "Chrome");
 
         } else {
-            System.out.println("Add any drivers for browsers for your OS");;
+            System.out.println("Add any drivers for browsers for your OS");
         }
 
         //WebDriver driver = new FirefoxDriver();
